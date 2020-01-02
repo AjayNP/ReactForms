@@ -1,12 +1,17 @@
 import React, { Component } from "react";
-
+import "./Form.css";
 class Forms extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       username: "",
-      topic: "b"
+      email:"",
+      nameError:"",
+      emailError:"",
+      passwordError:"",
+      password: "",
+      topic: "react"
     };
   }
 
@@ -20,31 +25,55 @@ class Forms extends Component {
       topic: event.target.value
     });
   };
-  handleSubmit = (event) =>{
-        console.log(`${this.state.username} ${this.state.topic}`);
-  }
+  handlePwd = event => {
+    this.setState({
+        password: event.target.value
+    });
+  };
+  handleSubmit = event => {
+    console.log(`${this.state.username} ${this.state.password} ${this.state.topic}`);
+    event.preventDefault();
+  };
   render() {
+    const { username, topic, pwd } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <div>
+          <div className="form-group">
             <label>Username</label>
             <input
+              className="form-control"
               type="text"
-              value={this.state.username}
+              value={username}
               onChange={this.handleUsernameChange}
             />
           </div>
-          <div>
-            <label>Topic</label>
-            <select value={this.state.topic} onChange={this.handleTopicChange}>
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              className="form-control"
+              type="password"
+              value={pwd}
+              onChange={this.handlePwd}
+            />
+          </div>
+          <div className="form-group">
+            <label>Role</label>
+            <select
+              value={topic}
+              onChange={this.handleTopicChange}
+              className="form-control"
+            >
               <option>Select</option>
-              <option value="a">A</option>
-              <option value="b">B</option>
-              <option value="c">C</option>
+              <option value="a">Angular</option>
+              <option value="react">React</option>
+              <option value="c">Vue</option>
             </select>
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
         </form>
       </div>
     );
