@@ -1,17 +1,14 @@
 import React from "react";
-import { Formik, FormikActions } from "formik";
+import { Formik } from "formik";
 import * as yup from "yup";
 import "./Form.css";
 
 const formSchema = yup.object().shape({
   name: yup.string().required("Please Enter Your Name"),
-  email: yup.string().required('Invalid Email'),
+  email: yup.string().email('Invalid Email').required('Email is required'),
   phone: yup.number().required('Please Enter Mob. No.'),
-  password: yup
-    .string()
-    .required()
-    .min(5)
-    .max(20)
+  password: yup.string().required().min(5).max(20),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Confirm Password must match with Password').required('Confirm Password is required')
 });
 
 const Userform = () => {
@@ -24,8 +21,9 @@ const Userform = () => {
         initialValues={{
           name: "",
           email: "",
-          phone: 0,
-          password: ""
+          phone: "",
+          password: "",
+          confirmPassword:''
         }}
         onSubmit={submitHandler}
       >
@@ -88,7 +86,19 @@ const Userform = () => {
               />
               <span className="error-msg">{touched.password && errors.password}</span>
             </div>
-            <button type="submit" className="btn btn-primary">
+            <div className="form-group">
+              <label>Confirm Password</label>
+              <input
+                className="form-control"
+                type="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.confirmPassword}
+                name="confirmPassword"
+              />
+              <span className="error-msg">{touched.confirmPassword && errors.confirmPassword}</span>
+            </div>
+            <button type="submit" className="btn btn-primary" disabled={ !isValid }>
               Submit
             </button>
           </form>
