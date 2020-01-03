@@ -41,3 +41,4 @@ label {
     cursor: pointer;
 }
 .btn-primary{color: #fff; background-color: #428cd1; border-color: #428cd1;}
+.error-msg{font-size: 12px; color: red; display: block;}

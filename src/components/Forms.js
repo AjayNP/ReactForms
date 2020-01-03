@@ -1,19 +1,15 @@
 import React, { Component } from "react";
 import "./Form.css";
-class Forms extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      username: "",
-      email:"",
-      nameError:"",
-      emailError:"",
-      passwordError:"",
-      password: "",
-      topic: "react"
-    };
-  }
+const initialState = {
+  username: "",
+  nameError: "",
+  passwordError: "",
+  password: "",
+  topic: "react"
+};
+class Forms extends Component {
+  state = initialState;
 
   handleUsernameChange = event => {
     this.setState({
@@ -27,12 +23,29 @@ class Forms extends Component {
   };
   handlePwd = event => {
     this.setState({
-        password: event.target.value
+      password: event.target.value
     });
   };
+  validate = () => {
+    let nameError = "";
+    // let passwordError= "";
+    if (!this.state.username.includes("@")) {
+      nameError = "Invalid Email";
+    }
+    if (nameError) {
+      this.setState({ nameError });
+      return false;
+    }
+    return true;
+  };
   handleSubmit = event => {
-    console.log(`${this.state.username} ${this.state.password} ${this.state.topic}`);
     event.preventDefault();
+    const isValid = this.validate();
+    if (isValid) {
+      console.log(this.state);
+      // clear Form
+      this.setState(initialState);
+    }
   };
   render() {
     const { username, topic, pwd } = this.state;
@@ -40,24 +53,17 @@ class Forms extends Component {
       <div>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label>Username</label>
+            <label>Email</label>
             <input
               className="form-control"
               type="text"
               value={username}
               onChange={this.handleUsernameChange}
             />
+
+            <span className="error-msg">{this.state.nameError}</span>
           </div>
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              className="form-control"
-              type="password"
-              value={pwd}
-              onChange={this.handlePwd}
-            />
-          </div>
           <div className="form-group">
             <label>Role</label>
             <select
@@ -71,6 +77,17 @@ class Forms extends Component {
               <option value="c">Vue</option>
             </select>
           </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              className="form-control"
+              type="password"
+              value={pwd}
+              onChange={this.handlePwd}
+            />
+            <span className="error-msg">{this.state.passwordError}</span>
+          </div>
+
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
