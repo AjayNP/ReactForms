@@ -1,18 +1,35 @@
 import React from "react";
+import { withRouter } from "react-router";
 import { Formik } from "formik";
 import * as yup from "yup";
 import "./Form.css";
 
 const formSchema = yup.object().shape({
   name: yup.string().required("Please Enter Your Name"),
-  email: yup.string().email('Invalid Email').required('Email is required'),
-  phone: yup.number().required('Please Enter Mob. No.'),
-  password: yup.string().required().min(5).max(20),
-  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Confirm Password must match with Password').required('Confirm Password is required')
+  email: yup
+    .string()
+    .email("Invalid Email")
+    .required("Email is required"),
+  phone: yup.number().required("Please Enter Mob. No."),
+  password: yup
+    .string()
+    .required()
+    .min(5)
+    .max(20),
+  confirmPassword: yup
+    .string()
+    .oneOf(
+      [yup.ref("password"), null],
+      "Confirm Password must match with Password"
+    )
+    .required("Confirm Password is required")
 });
 
-const Userform = () => {
-  const submitHandler = () => {  
+const Userform = props => {
+  const { history } = props;
+
+  const submitHandler = () => {
+    history.push('/forms')
   };
   return (
     <div className="form">
@@ -23,7 +40,7 @@ const Userform = () => {
           email: "",
           phone: "",
           password: "",
-          confirmPassword:''
+          confirmPassword: ""
         }}
         onSubmit={submitHandler}
       >
@@ -84,7 +101,9 @@ const Userform = () => {
                 value={values.password}
                 name="password"
               />
-              <span className="error-msg">{touched.password && errors.password}</span>
+              <span className="error-msg">
+                {touched.password && errors.password}
+              </span>
             </div>
             <div className="form-group">
               <label>Confirm Password</label>
@@ -96,9 +115,11 @@ const Userform = () => {
                 value={values.confirmPassword}
                 name="confirmPassword"
               />
-              <span className="error-msg">{touched.confirmPassword && errors.confirmPassword}</span>
+              <span className="error-msg">
+                {touched.confirmPassword && errors.confirmPassword}
+              </span>
             </div>
-            <button type="submit" className="btn btn-primary" disabled={ !isValid }>
+            <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </form>
@@ -108,4 +129,4 @@ const Userform = () => {
   );
 };
 
-export default Userform;
+export default withRouter(Userform);
